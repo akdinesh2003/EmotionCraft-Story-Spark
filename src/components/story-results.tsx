@@ -3,15 +3,16 @@
 import { Download } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { type StoryStarter } from '@/ai/flows/generate-story-starters';
 
 interface StoryResultsProps {
-  stories: string[];
+  stories: StoryStarter[];
 }
 
 export function StoryResults({ stories }: StoryResultsProps) {
   const handleExport = () => {
     const markdownContent = stories
-      .map((story, index) => `## Story Starter ${index + 1}\n\n${story}`)
+      .map((story, index) => `## ${story.title}\n\n${story.story}`)
       .join('\n\n---\n\n');
 
     const blob = new Blob([markdownContent], { type: 'text/markdown;charset=utf-8' });
@@ -38,10 +39,10 @@ export function StoryResults({ stories }: StoryResultsProps) {
         {stories.map((story, index) => (
           <Card key={index} className="transform-gpu transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl">
             <CardHeader>
-              <CardTitle className="font-headline text-2xl text-primary">Story #{index + 1}</CardTitle>
+              <CardTitle className="font-headline text-2xl text-primary">{story.title}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-lg leading-relaxed text-card-foreground">{story}</p>
+              <p className="text-lg leading-relaxed text-card-foreground">{story.story}</p>
             </CardContent>
           </Card>
         ))}

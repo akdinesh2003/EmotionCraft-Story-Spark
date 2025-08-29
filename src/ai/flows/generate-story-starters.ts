@@ -42,8 +42,14 @@ const GenerateStoryStartersInputSchema = z.object({
 });
 export type GenerateStoryStartersInput = z.infer<typeof GenerateStoryStartersInputSchema>;
 
+const StoryStarterSchema = z.object({
+  title: z.string().describe('A compelling title for the story starter.'),
+  story: z.string().describe('The generated story starter paragraph.'),
+});
+export type StoryStarter = z.infer<typeof StoryStarterSchema>;
+
 const GenerateStoryStartersOutputSchema = z.object({
-  storyStarters: z.array(z.string()).describe('An array of generated story starters.'),
+  storyStarters: z.array(StoryStarterSchema).describe('An array of generated story starters, each with a title and story.'),
 });
 export type GenerateStoryStartersOutput = z.infer<typeof GenerateStoryStartersOutputSchema>;
 
@@ -57,14 +63,14 @@ const storyStarterPrompt = ai.definePrompt({
   name: 'storyStarterPrompt',
   input: {schema: GenerateStoryStartersInputSchema},
   output: {schema: GenerateStoryStartersOutputSchema},
-  prompt: `You are a creative story writer. Given the following mood, genre, character archetype, and setting, generate a compelling story starter.
+  prompt: `You are a creative story writer. Given the following mood, genre, character archetype, and setting, generate a compelling story starter. For each story starter, also generate a compelling title.
 
 Mood: {{mood}}
 Genre: {{genre}}
 Character Archetype: {{characterArchetype}}
 Setting: {{setting}}
 
-Each story starter should be unique and engaging. Return {{numberOfStarters}} story starters. Return it as JSON array of strings.
+Each story starter should be unique and engaging. Return {{numberOfStarters}} story starters. Return it as a JSON array of objects, where each object has a "title" and a "story".
 `,
 });
 

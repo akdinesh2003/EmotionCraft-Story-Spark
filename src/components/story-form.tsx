@@ -24,7 +24,7 @@ import {
   Palmtree,
 } from 'lucide-react';
 
-import { type Mood, type Genre, type CharacterArchetype, type Setting } from '@/ai/flows/generate-story-starters';
+import { type Mood, type Genre, type CharacterArchetype, type Setting, type StoryStarter } from '@/ai/flows/generate-story-starters';
 import { generateStoriesAction } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -109,7 +109,7 @@ export function StoryForm() {
   const [genre, setGenre] = useState<Genre | null>(null);
   const [characterArchetype, setCharacterArchetype] = useState<CharacterArchetype | null>(null);
   const [setting, setSetting] = useState<Setting | null>(null);
-  const [stories, setStories] = useState<string[]>([]);
+  const [stories, setStories] = useState<StoryStarter[]>([]);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
