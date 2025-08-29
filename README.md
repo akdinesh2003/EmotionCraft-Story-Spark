@@ -2,8 +2,6 @@
 
 Welcome to **EmotionCraft Story Spark**, a creative tool designed to ignite your imagination! This application leverages the power of AI to generate unique and compelling story starters based on your creative choices. Select a mood, genre, character archetype, and setting, and let our AI craft the perfect opening for your next masterpiece.
 
-![EmotionCraft Story Spark Screenshot](https://storage.googleapis.com/stedi-assets/dev-rel-demos/emotion-craft-screenshot.png)
-
 ## 🚀 Features
 
 - **AI-Powered Story Generation**: Get unique story starters complete with a compelling title.
