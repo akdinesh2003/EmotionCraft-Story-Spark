@@ -76,5 +76,6 @@ This server runs in watch mode, so it will automatically restart if you make cha
 
 With both servers running, open your browser to [http://localhost:9002](http://localhost:9002). You can now select your desired options and start generating story starters!
 
----
-*This project was generated and modified with Firebase Studio.*
+### Author
+
+AK DINESH   https://github.com/akdinesh2003
