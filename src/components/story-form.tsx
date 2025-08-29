@@ -17,9 +17,14 @@ import {
   Sunrise,
   Swords,
   Zap,
+  Building2,
+  Trees,
+  Orbit,
+  Home,
+  Palmtree,
 } from 'lucide-react';
 
-import { type Mood, type Genre, type CharacterArchetype } from '@/ai/flows/generate-story-starters';
+import { type Mood, type Genre, type CharacterArchetype, type Setting } from '@/ai/flows/generate-story-starters';
 import { generateStoriesAction } from '@/app/actions';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -50,6 +55,14 @@ const archetypes: { name: CharacterArchetype; icon: ComponentType<{ className?: 
   { name: 'tragic hero', icon: Swords },
   { name: 'wise mentor', icon: BookOpen },
   { name: 'innocent', icon: Baby },
+];
+
+const settings: { name: Setting; icon: ComponentType<{ className?: string }> }[] = [
+  { name: 'dystopian city', icon: Building2 },
+  { name: 'enchanted forest', icon: Trees },
+  { name: 'space station', icon: Orbit },
+  { name: 'haunted mansion', icon: Home },
+  { name: 'desert island', icon: Palmtree },
 ];
 
 interface SelectionGroupProps<T extends string> {
@@ -95,23 +108,24 @@ export function StoryForm() {
   const [mood, setMood] = useState<Mood | null>(null);
   const [genre, setGenre] = useState<Genre | null>(null);
   const [characterArchetype, setCharacterArchetype] = useState<CharacterArchetype | null>(null);
+  const [setting, setSetting] = useState<Setting | null>(null);
   const [stories, setStories] = useState<string[]>([]);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
 
   const handleSubmit = () => {
-    if (!mood || !genre || !characterArchetype) {
+    if (!mood || !genre || !characterArchetype || !setting) {
       toast({
         variant: 'destructive',
         title: 'Incomplete Selection',
-        description: 'Please select a mood, genre, and character archetype.',
+        description: 'Please select a mood, genre, character archetype, and setting.',
       });
       return;
     }
 
     startTransition(async () => {
       setStories([]);
-      const result = await generateStoriesAction({ mood, genre, characterArchetype });
+      const result = await generateStoriesAction({ mood, genre, characterArchetype, setting });
       if (result.success && result.stories) {
         setStories(result.stories);
       } else {
@@ -124,15 +138,16 @@ export function StoryForm() {
     });
   };
 
-  const isButtonDisabled = !mood || !genre || !characterArchetype;
+  const isButtonDisabled = !mood || !genre || !characterArchetype || !setting;
 
   return (
     <div className="mt-16 space-y-16">
       <div className="space-y-12">
         <SelectionGroup title="1. Choose a Mood" options={moods} selectedValue={mood} onSelect={setMood} />
         <SelectionGroup title="2. Pick a Genre" options={genres} selectedValue={genre} onSelect={setGenre} />
+        <SelectionGroup title="3. Choose a Setting" options={settings} selectedValue={setting} onSelect={setSetting} />
         <SelectionGroup
-          title="3. Select an Archetype"
+          title="4. Select an Archetype"
           options={archetypes}
           selectedValue={characterArchetype}
           onSelect={setCharacterArchetype}

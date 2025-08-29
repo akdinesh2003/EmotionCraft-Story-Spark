@@ -25,10 +25,14 @@ const CharacterArchetypeSchema = z.enum([
 ]);
 export type CharacterArchetype = z.infer<typeof CharacterArchetypeSchema>;
 
+const SettingSchema = z.enum(['dystopian city', 'enchanted forest', 'space station', 'haunted mansion', 'desert island']);
+export type Setting = z.infer<typeof SettingSchema>;
+
 const GenerateStoryStartersInputSchema = z.object({
   mood: MoodSchema.describe('The mood of the story.'),
   genre: GenreSchema.describe('The genre of the story.'),
   characterArchetype: CharacterArchetypeSchema.describe('The character archetype in the story.'),
+  setting: SettingSchema.describe('The setting of the story.'),
   numberOfStarters: z
     .number()
     .min(1)
@@ -53,11 +57,12 @@ const storyStarterPrompt = ai.definePrompt({
   name: 'storyStarterPrompt',
   input: {schema: GenerateStoryStartersInputSchema},
   output: {schema: GenerateStoryStartersOutputSchema},
-  prompt: `You are a creative story writer. Given the following mood, genre, and character archetype, generate a compelling story starter.
+  prompt: `You are a creative story writer. Given the following mood, genre, character archetype, and setting, generate a compelling story starter.
 
 Mood: {{mood}}
 Genre: {{genre}}
 Character Archetype: {{characterArchetype}}
+Setting: {{setting}}
 
 Each story starter should be unique and engaging. Return {{numberOfStarters}} story starters. Return it as JSON array of strings.
 `,
@@ -70,14 +75,7 @@ const generateStoryStartersFlow = ai.defineFlow(
     outputSchema: GenerateStoryStartersOutputSchema,
   },
   async input => {
-    const numberOfStarters = input.numberOfStarters;
-    const storyStarters: string[] = [];
-    for (let i = 0; i < numberOfStarters; i++) {
-      const {output} = await storyStarterPrompt(input);
-      if (output?.storyStarters && output.storyStarters.length > 0) {
-        storyStarters.push(output.storyStarters[0]);
-      }
-    }
-    return {storyStarters};
+    const {output} = await storyStarterPrompt(input);
+    return output || {storyStarters: []};
   }
 );

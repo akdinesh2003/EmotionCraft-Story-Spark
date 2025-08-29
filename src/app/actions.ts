@@ -7,6 +7,7 @@ import {
   type Mood,
   type Genre,
   type CharacterArchetype,
+  type Setting,
 } from '@/ai/flows/generate-story-starters';
 
 // This is a type guard to check if a string is a valid Mood
@@ -24,13 +25,18 @@ function isCharacterArchetype(value: string): value is CharacterArchetype {
     return ['reluctant hero', 'cunning villain', 'tragic hero', 'wise mentor', 'innocent'].includes(value);
 }
 
+// This is a type guard to check if a string is a valid Setting
+function isSetting(value: string): value is Setting {
+    return ['dystopian city', 'enchanted forest', 'space station', 'haunted mansion', 'desert island'].includes(value);
+}
 
 export async function generateStoriesAction(input: {
   mood: string;
   genre: string;
   characterArchetype: string;
+  setting: string;
 }) {
-  if (!isMood(input.mood) || !isGenre(input.genre) || !isCharacterArchetype(input.characterArchetype)) {
+  if (!isMood(input.mood) || !isGenre(input.genre) || !isCharacterArchetype(input.characterArchetype) || !isSetting(input.setting)) {
       return { success: false, error: 'Invalid input provided.' };
   }
 
@@ -38,6 +44,7 @@ export async function generateStoriesAction(input: {
     mood: input.mood,
     genre: input.genre,
     characterArchetype: input.characterArchetype,
+    setting: input.setting,
     numberOfStarters: 3,
   };
 
